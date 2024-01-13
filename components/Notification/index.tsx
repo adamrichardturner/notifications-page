@@ -30,7 +30,7 @@ const Notification: FC<NotificationProps> = ({
 }) => {
   const [userSeen, setUserSeen] = useState(user.seen)
   const handleClick = () => {
-    if (!userSeen) {
+    if (!userSeen && counter > 0) {
       setCounter((prev: number) => prev - 1)
       setUserSeen(true) // Mark as seen
     }
@@ -45,7 +45,7 @@ const Notification: FC<NotificationProps> = ({
       <div
         className={`${
           userSeen
-            ? 'bg-white pointer-events-none cursor-default'
+            ? 'bg-white cursor-default'
             : 'bg-neutral-veryLightGrayishBlue cursor-pointer'
         } flex flex-row md:flex-row items-start space-x-3 space-y-0 p-4`}
         onClick={handleClick}
