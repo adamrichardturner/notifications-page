@@ -1,7 +1,8 @@
-import { FC } from 'react'
+import { FC, useState } from 'react'
 import Image from 'next/image'
+import { motion } from 'framer-motion'
 
-interface UserNotification {
+export interface UserNotification {
   name: string
   src: string
   timestamp: string
@@ -10,65 +11,106 @@ interface UserNotification {
   commentedPicture?: string
   groups?: string
   seen: boolean
+  quote?: string
 }
-
 interface NotificationProps {
   user: UserNotification
+  i: number
 }
 
-const Notification: FC<NotificationProps> = ({ user }) => {
+const Notification: FC<NotificationProps> = ({ user, i }) => {
+  // State to track if the images have loaded
+  const [imagesLoaded, setImagesLoaded] = useState(false)
+
+  // Event handler to set imagesLoaded to true
+  const handleImageLoad = () => {
+    setImagesLoaded(true)
+  }
   return (
-    <article
+    <motion.article
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      transition={{ duration: 0.125, delay: i * 0.05 }} // Adjust delay based on index
       className={`${
-        user.seen && 'bg-neutral-veryLightGrayishBlue'
-      } notification w-full flex flex-col my-2 p-4 rounded-lg`}
+        !user.seen ? 'bg-neutral-veryLightGrayishBlue' : ''
+      } notification w-full flex flex-col py-4 pl-4 pr-6 rounded-lg leading-tight`}
     >
-      <div className='flex flex-row items-center justify-start space-x-3'>
-        <div style={{ width: '40px', height: '40px', position: 'relative' }}>
+      <div className='flex flex-row md:flex-row items-start space-x-3 space-y-0'>
+        <div
+          style={{
+            minWidth: '40px',
+            height: '40px',
+            position: 'relative',
+          }}
+        >
           <Image
             src={user.src}
             alt={user.name}
-            fill
-            style={{ objectFit: 'cover' }}
+            layout='fill'
+            objectFit='cover'
           />
         </div>
-        <div className='notification-details leading-tight flex flex-col justify-between text-neutral-darkGrayishBlue'>
-          <div className='flex flex-row space-x-1'>
-            <span className='font-bold text-neutral-veryDarkBlue'>
-              {user.name}
+
+        <div className='flex-grow flex flex-col items-start'>
+          <div className='inline space-x-0.5'>
+            <span className='font-bold text-neutral-veryDarkBlue hover:text-primary-blue hover:cursor-pointer'>
+              {user.name}{' '}
             </span>
-            <div
-              className={`space-x-1 text-neutral-veryDarkBlue flex flex-row justify-start items-center`}
-            >
-              <span className=''>{user.notification}</span>
-              <span>
-                {user.post && <span className='font-bold'>{user.post}</span>}
+            <span className='text-neutral-grayishBlue font-normal'>
+              {user.notification}{' '}
+            </span>
+            {user.post && (
+              <span className='font-bold text-neutral-grayishBlue cursor-pointer'>
+                {user.post}{' '}
               </span>
-              {user.groups && (
-                <span className='font-bold text-primary-blue'>
-                  {user.groups}
+            )}
+            {user.groups && (
+              <span className='font-bold text-primary-blue cursor-pointer'>
+                {user.groups}{' '}
+              </span>
+            )}
+            {!user.seen && (
+              <div className='inline-block'>
+                <span className='flex flex-row items-center h-full'>
+                  <span
+                    className='seen-indicator'
+                    style={{
+                      display: 'inline-block',
+                      width: '8px',
+                      height: '8px',
+                      backgroundColor: 'red',
+                      borderRadius: '50%',
+                    }}
+                  ></span>
                 </span>
-              )}
-              {user.seen && (
-                <div className='w-2 h-2 bg-primary-red rounded-full inline-block'></div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
-          <div className='timestamp'>{user.timestamp}</div>
-        </div>
-        <div>
-          <div>
-            {user.commentedPicture && (
-              <div
-                style={{ width: '32px', height: '32px', position: 'relative' }}
-              >
-                <Image src={user.commentedPicture} alt={user.name} fill />
+          <div className='user-meta'>
+            <div className='timestamp text-neutral-grayishBlue'>
+              {user.timestamp}
+            </div>
+            {user.quote && (
+              <div className='w-full border-neutral-grayishBlue border-[0.5px] mt-2 p-4 rounded cursor-pointer hover:bg-neutral-lightGrayishBlue1'>
+                <p className='text-neutral-grayishBlue'>{user.quote}</p>
               </div>
             )}
           </div>
         </div>
+        {user.commentedPicture && (
+          <div
+            style={{ minWidth: '32px', height: '32px', position: 'relative' }}
+          >
+            <Image
+              src={user.commentedPicture}
+              alt='Commented'
+              layout='fill'
+              objectFit='cover'
+            />
+          </div>
+        )}
       </div>
-    </article>
+    </motion.article>
   )
 }
 
