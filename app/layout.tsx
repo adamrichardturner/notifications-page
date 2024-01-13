@@ -20,7 +20,7 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body
-        className={`${jakarta.className} text-body bg-neutral-veryLightGrayishBlue flex flex-col items-center justify-center`}
+        className={`${jakarta.className} text-body bg-neutral-lightGrayishBlue1 flex flex-col items-center justify-center`}
       >
         {children}
       </body>

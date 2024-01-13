@@ -38,13 +38,15 @@ export default function Page() {
     })
 
   return (
-    <main className='flex min-h-screen flex-col items-center justify-center container w-full'>
-      <section className='bg-neutral-white px-6 shadow'>
-        <div className='flex flex-row justify-between items-center py-6'>
+    <main className='flex min-h-screen flex-col items-center justify-center container w-full rounded-lg'>
+      <section className='bg-neutral-white px-6 shadow rounded-lg'>
+        <div className='flex flex-row justify-between items-center py-8'>
           <div className='flex flex-row space-x-2 items-center'>
-            <h2 className='font-bold text-xl'>Notifications</h2>
-            <div className='bg-primary-blue px-2 rounded font-bold text-white transition ease-in-out'>
-              {counter}
+            <h2 className='font-bold text-xl text-neutral-darkGrayishBlue'>
+              Notifications
+            </h2>
+            <div className='bg-primary-blue px-2 rounded font-bold text-white transition ease-in-out w-7 text-center'>
+              <span>{counter}</span>
             </div>
           </div>
 
@@ -53,7 +55,7 @@ export default function Page() {
               <p
                 className={`${
                   counter > 0 ? 'hidden' : ''
-                }text-gray-500 hover:text-primary-blue cursor-pointer transition ease-in-out`}
+                }text-neutral-darkGrayishBlue hover:text-primary-blue cursor-pointer transition ease-in-out`}
               >
                 Mark all as read
               </p>
