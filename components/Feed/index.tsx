@@ -1,21 +1,28 @@
 'use client'
-import { useState } from 'react'
 
+import { useState } from 'react'
 import Notification from '@/components/Notification'
 import usersData from '@/utils/users.json'
+import { UserNotification } from '@/components/Notification'
 
 export default function Page() {
-  const [users, setUsers] = useState(usersData)
+  // Store our notifications in users as a raw array of objects
+  const [users, setUsers] = useState<UserNotification[]>(usersData)
+
+  // Store our counter for the seen notifications at top of Feed
   const [counter, setCounter] = useState(
+    // Length of unseen notifications array
     usersData.filter((user) => !user.seen).length
   )
 
   const markAllAsRead = () => {
+    // Marks all notifications as read and resets counter to 0
     const updatedUsers = users.map((user) => ({ ...user, seen: true }))
     setUsers(updatedUsers)
     setCounter(0)
   }
 
+  // Notifications list to render in the return statement, sorted by ID
   const notificationList = users
     .sort((a, b) => a.id - b.id)
     .map((user, index) => {
@@ -26,7 +33,6 @@ export default function Page() {
           i={index}
           setCounter={setCounter}
           counter={counter}
-          viewed={false}
         />
       )
     })
@@ -37,18 +43,17 @@ export default function Page() {
         <div className='flex flex-row justify-between items-center py-6'>
           <div className='flex flex-row space-x-2 items-center'>
             <h2 className='font-bold text-xl'>Notifications</h2>
-            <div className='bg-primary-blue px-2 rounded font-bold text-white'>
+            <div className='bg-primary-blue px-2 rounded font-bold text-white transition ease-in-out'>
               {counter}
             </div>
           </div>
 
-          {/* Step 3: Attach the function to the onClick event of the button */}
           {counter > 0 && (
             <div onClick={markAllAsRead}>
               <p
                 className={`${
                   counter > 0 ? 'hidden' : ''
-                }text-gray-500 hover:text-primary-blue cursor-pointer`}
+                }text-gray-500 hover:text-primary-blue cursor-pointer transition ease-in-out`}
               >
                 Mark all as read
               </p>

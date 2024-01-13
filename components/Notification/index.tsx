@@ -1,4 +1,4 @@
-import { FC, MouseEventHandler, useState } from 'react'
+import { FC, useState } from 'react'
 import Image from 'next/image'
 import { motion } from 'framer-motion'
 
@@ -12,27 +12,32 @@ export interface UserNotification {
   groups?: string
   seen: boolean
   quote?: string
+  id: number
 }
 interface NotificationProps {
   user: UserNotification
   i: number
-  viewed: boolean
   setCounter: Function
   counter: number
 }
 
 const Notification: FC<NotificationProps> = ({
-  viewed,
   setCounter,
   user,
   counter,
   i,
 }) => {
+  // Store click state for whether user has confirmed the notification
   const [userSeen, setUserSeen] = useState(user.seen)
+
+  // Handles clicks on the notification
   const handleClick = () => {
+    // Conditional prevents multiple 'seen' clicks
     if (!userSeen && counter > 0) {
+      // Set local userSeen state to true
+      setUserSeen(true)
+      // Set counter in parent Feed component to counter - 1
       setCounter((prev: number) => prev - 1)
-      setUserSeen(true) // Mark as seen
     }
   }
 
@@ -44,10 +49,10 @@ const Notification: FC<NotificationProps> = ({
     >
       <div
         className={`${
-          userSeen
-            ? 'bg-white cursor-default'
-            : 'bg-neutral-veryLightGrayishBlue cursor-pointer'
-        } flex flex-row md:flex-row items-start space-x-3 space-y-0 p-4`}
+          userSeen || user.seen
+            ? 'bg-white cursor-default transition ease-in-out'
+            : 'bg-neutral-veryLightGrayishBlue cursor-pointer transition ease-in-out'
+        } flex flex-row md:flex-row items-start space-x-3 space-y-0 p-4 leading-tight`}
         onClick={handleClick}
       >
         <div
@@ -65,21 +70,21 @@ const Notification: FC<NotificationProps> = ({
           />
         </div>
 
-        <div onClick={() => handleClick}>
+        <div>
           <div className='inline space-x-0.5'>
-            <span className='font-bold text-neutral-veryDarkBlue hover:text-primary-blue'>
+            <span className='font-bold text-neutral-veryDarkBlue hover:text-primary-blue transition ease-in-out hover:cursor-pointer'>
               {user.name}{' '}
             </span>
             <span className='text-neutral-grayishBlue font-normal'>
               {user.notification}{' '}
             </span>
             {user.post && (
-              <span className='font-bold text-neutral-grayishBlue'>
+              <span className='font-bold text-neutral-grayishBlue hover:cursor-pointer transition ease-in-out hover:text-primary-blue'>
                 {user.post}{' '}
               </span>
             )}
             {user.groups && (
-              <span className='font-bold text-primary-blue'>
+              <span className='font-bold text-primary-blue transition ease-in-out hover:cursor-pointer'>
                 {user.groups}{' '}
               </span>
             )}
@@ -108,7 +113,7 @@ const Notification: FC<NotificationProps> = ({
               {user.timestamp}
             </div>
             {user.quote && (
-              <div className='w-full border-neutral-grayishBlue border-[0.5px] mt-2 p-4 rounded hover:bg-neutral-lightGrayishBlue1'>
+              <div className='w-full border-neutral-grayishBlue border-[0.5px] mt-2 p-4 rounded hover:bg-neutral-lightGrayishBlue1 hover:cursor-pointer'>
                 <p className='text-neutral-grayishBlue'>{user.quote}</p>
               </div>
             )}
