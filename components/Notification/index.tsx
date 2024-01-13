@@ -52,7 +52,7 @@ const Notification: FC<NotificationProps> = ({
           userSeen || user.seen
             ? 'bg-white cursor-default transition ease-in-out'
             : 'bg-neutral-veryLightGrayishBlue cursor-pointer transition ease-in-out'
-        } flex flex-row md:flex-row items-start space-x-3 space-y-0 p-4 leading-tight`}
+        } flex flex-row md:flex-row items-start space-x-3 space-y-0 p-4 leading-tight rounded-lg`}
         onClick={handleClick}
       >
         <div
@@ -113,7 +113,7 @@ const Notification: FC<NotificationProps> = ({
               {user.timestamp}
             </div>
             {user.quote && (
-              <div className='w-full border-neutral-grayishBlue border-[0.5px] mt-2 p-4 rounded hover:bg-neutral-lightGrayishBlue1 hover:cursor-pointer'>
+              <div className='w-full border-neutral-grayishBlue border-[0.5px] mt-2 p-4 rounded hover:bg-neutral-lightGrayishBlue1 hover:cursor-pointer transition ease-in-out'>
                 <p className='text-neutral-grayishBlue'>{user.quote}</p>
               </div>
             )}
